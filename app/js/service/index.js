@@ -1,1 +1,1 @@
-module.exports = {};
+var app = require('angular').module('johnApp');

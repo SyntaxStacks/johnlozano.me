@@ -1,6 +1,6 @@
 {
   "name": "johnlozano.me",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Personal Site of John Lozano",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,7 @@
   "dependencies": {
     "angular-route": "~1.4.3",
     "angular-bootstrap-npm": "~0.13.0",
+    "angular-ui-router": "~0.2.15",
     "bootstrap": "~3.3.5"
   },
   "browserify": {

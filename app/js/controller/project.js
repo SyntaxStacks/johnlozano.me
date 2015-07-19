@@ -1,3 +1,3 @@
-module.exports = ['$scope', 'VERSION', function ($scope, VERSION) {
-    $scope.version = VERSION;
+module.exports = ['$scope', function ($scope) {
+    $scope.$parent.state = 'project';
 }];

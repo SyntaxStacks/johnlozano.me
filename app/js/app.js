@@ -1,7 +1,10 @@
 var angular = require('angular');
-require('angular-route');
+require('bootstrap')
 
-var app = angular.module('johnApp', [ 'ngRoute' ]);
+var app = angular.module('johnApp', [
+  require('angular-route'),
+  require('angular-bootstrap-npm')
+]);
 
 app.constant('VERSION', require('../../package.json').version);
 
@@ -14,10 +17,14 @@ app.config(function($routeProvider) {
     templateUrl: 'app/views/home.html',
     controller: 'HomeCtrl',
   })
-  // .when('/mao', {
-  //   templateUrl: 'views/imprint.html',
-  //   controller: 'ImprintCtrl',
-  // })
+  .when('/project', {
+    templateUrl: 'app/views/project.html',
+    controller: 'ProjectCtrl',
+  })
+  .when('/contact', {
+    templateUrl: 'app/views/contact.html',
+    controller: 'ContactCtrl',
+  })
   .otherwise({
     redirectTo: '/',
   });

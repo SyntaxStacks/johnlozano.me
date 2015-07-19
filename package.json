@@ -1,13 +1,13 @@
 {
   "name": "johnlozano.me",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Personal Site of John Lozano",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "./node_modules/browserify/bin/cmd.js ./app/js/app.js > build/app.js",
     "watch": "./node_modules/watch/cli.js \"npm run build\" ./app",
-    "server": "./node_modules/node-static/bin/cli.js"
+    "start": "./node_modules/node-static/bin/cli.js"
   },
   "author": "John Lozano <info@johnlozano.me>",
   "license": "MIT",
@@ -19,7 +19,9 @@
     "node-static": "~0.7.7"
   },
   "dependencies": {
-    "angular-route": "~1.4.3"
+    "angular-route": "~1.4.3",
+    "angular-bootstrap-npm": "~0.13.0",
+    "bootstrap": "~3.3.5"
   },
   "browserify": {
     "transform": [

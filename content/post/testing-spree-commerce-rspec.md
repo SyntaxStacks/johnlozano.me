@@ -3,7 +3,7 @@ date = "2016-11-12T11:08:56-06:00"
 title = "Testing Spree Commerce with RSpec"
 
 author = "John Lozano"
-draft = true
+draft = false
 slug = "testing-spree-commerce-with-rspec"
 tags = ["testing", "rails"]
 image = "images/2014/Jul/titledotscale.png"

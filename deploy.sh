@@ -1,11 +1,13 @@
 #!/bin/bash
-hugo -d /tmp/jdist
-git checkout master
-git branch -D gh-pages
-git checkout --orphan gh-pages
-git rm -r *
-cp /tmp/jdist/public/* .
+git checkout dev
+git branch -D master
+git checkout --orphan master
+git clone git@github.com:SyntaxStacks/hugo-theme-casper.git themes/casper
+hugo -b http://syntaxstacks.github.io -d /tmp/jdist
+git rm -rf *
+cp -r /tmp/jdist/* .
 rm -rf /tmp/jdist
 git add .
 git commit -m'Github Pages'
-git push origin gh-pages -f
+git push origin master -f
+git checkout dev

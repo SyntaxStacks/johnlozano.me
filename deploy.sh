@@ -6,6 +6,7 @@ git clone git@github.com:SyntaxStacks/hugo-theme-casper.git themes/casper
 hugo -b http://syntaxstacks.github.io -d /tmp/jdist
 git rm -rf *
 cp -r /tmp/jdist/* .
+echo "www.johnlozano.me" > CNAME
 rm -rf /tmp/jdist
 git add .
 git commit -m'Github Pages'

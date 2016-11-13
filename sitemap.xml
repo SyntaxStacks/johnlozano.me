@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>http://syntaxstacks.github.io/</loc>
+    <lastmod>2016-11-12T11:08:56-06:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://syntaxstacks.github.io/post/testing-spree-commerce-with-rspec/</loc>
+    <lastmod>2016-11-12T11:08:56-06:00</lastmod>
+  </url>
+  
+</urlset>

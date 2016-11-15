@@ -99,7 +99,7 @@ context "when payment processing succeeds" do
 end
 ```
 
-We add a fake payment to the order and then start our assertions and actions. `order.next!` steps the the
+We add a fake payment to the order and then start our assertions and actions. `order.next!` steps the
 `complete` state and we can expect that the `submit_order_to_printful` method is called.
 
 ## The Code

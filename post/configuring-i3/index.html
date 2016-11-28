@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    
+
+
+    
+        
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:image" content="http://syntaxstacks.github.io//assets/images/i3.png"/>
+    
+
+
+
+<meta name="twitter:title" content="Configuring i3"/>
+<meta name="twitter:description" content="As a developer, focus is key. An environment with minimal distractions is conducive to productivity and window managers offer minimalist user interfaces in place of the traditional desktop environment. i3 on Ubuntu will be discussed here but there are alternate window managers such as dwm and awesome. i3 can be installed with the following command:
+# install i3 sudo apt-get install i3  i3 Configuration i3’s configuration should be created in ~/."/>
+
+    <meta name="twitter:site" content="@your_twitter"/>
+
+
+
+  	<meta property="og:title" content=" Configuring i3 &middot;  John Lozano" />
+  	<meta property="og:site_name" content="John Lozano" />
+  	<meta property="og:url" content="http://syntaxstacks.github.io/post/configuring-i3/" />
+
+    
+  	<meta property="og:type" content="article" />
+
+    <meta property="og:article:published_time" content="2016-11-27T15:43:52-06:00" />
+
+    
+    <meta property="og:article:tag" content="linux" />
+    
+    <meta property="og:article:tag" content="wm" />
+    
+    <meta property="og:article:tag" content="i3" />
+    
+    
+
+    <title>
+       Configuring i3 &middot;  John Lozano
+    </title>
+
+    <meta name="description" content="Ideas are worth their weight unless acted upon." />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="http://syntaxstacks.github.io/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="http://syntaxstacks.github.io/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="http://syntaxstacks.github.io/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://syntaxstacks.github.io/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
+
+
+    
+      
+          <link href="http://syntaxstacks.github.io/index.xml" rel="alternate" type="application/rss+xml" title="John Lozano" />
+      
+      
+    
+    <meta name="generator" content="Hugo 0.17" />
+
+    <link rel="canonical" href="http://syntaxstacks.github.io/post/configuring-i3/" />
+
+    
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-79101-12', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+    
+
+    
+</head>
+<body class="nav-closed">
+
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">blog</a>
+            </li>
+        
+            
+            <li class="nav-opened nav-current" role="presentation">
+            	<a href="/post/configuring-i3/">Configuring i3</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/post/testing-spree-commerce-with-rspec/">Testing Spree Commerce with RSpec</a>
+            </li>
+        
+    </ul>
+    
+    
+    <a class="subscribe-button icon-feed" href="http://syntaxstacks.github.io/index.xml">Subscribe</a>
+    
+</div>
+<span class="nav-cover"></span>
+
+
+ <div class="site-wrapper">
+
+
+
+
+  
+  <header class="main-header post-head" style="background-image: url(http://syntaxstacks.github.io//assets/images/i3.png)">
+  
+  <nav class="main-nav overlay clearfix">
+
+
+  
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
+</header>
+
+
+
+<main class="content" role="main">
+
+
+
+
+  <article class="post post">
+
+    <header class="post-header">
+        <h1 class="post-title">Configuring i3</h1>
+        <small></small>
+
+        <section class="post-meta">
+        
+          <time class="post-date" datetime="2016-11-27T15:43:52-06:00">
+            Nov 27, 2016
+          </time>
+        
+         
+          <span class="post-tag small"><a href="http://syntaxstacks.github.io/tags/linux/">#linux</a></span>
+         
+          <span class="post-tag small"><a href="http://syntaxstacks.github.io/tags/wm/">#wm</a></span>
+         
+          <span class="post-tag small"><a href="http://syntaxstacks.github.io/tags/i3/">#i3</a></span>
+         
+        </section>
+    </header>
+
+    <section class="post-content">
+      
+
+<p>As a developer, focus is key. An environment with minimal distractions is conducive to productivity and window managers offer minimalist user interfaces in place of the traditional desktop environment. i3 on Ubuntu will be discussed here but there are alternate window managers such as <a href="http://dwm.suckless.org/">dwm</a> and <a href="https://awesome.naquadah.org/">awesome</a>. i3 can be installed with the following command:</p>
+
+<pre><code># install i3
+sudo apt-get install i3
+</code></pre>
+
+<h2 id="i3-configuration">i3 Configuration</h2>
+
+<p>i3’s configuration should be created in <code>~/.config/i3/config</code>. Here is the default configuration from the man page:</p>
+
+<pre><code># i3 config file (v4)
+
+# Font for window titles. Will also be used by the bar unless a different font
+# is used in the bar {} block below.
+# This font is widely installed, provides lots of unicode glyphs, right-to-left
+# text rendering and scalability on retina/hidpi displays (thanks to pango).
+font pango:DejaVu Sans Mono 8
+# Before i3 v4.8, we used to recommend this one as the default:
+# font -misc-fixed-medium-r-normal--13-120-75-75-C-70-iso10646-1
+# The font above is very space-efficient, that is, it looks good, sharp and
+# clear in small sizes. However, its unicode glyph coverage is limited, the old
+# X core fonts rendering does not support right-to-left and this being a bitmap
+# font, it doesn't scale on retina/hidpi displays.
+
+# use Mouse+Mod1 to drag floating windows to their wanted position
+floating_modifier Mod1
+
+# start a terminal
+bindsym Mod1+Return exec /usr/bin/urxvt
+
+# kill focused window
+bindsym Mod1+Shift+q kill
+
+# start dmenu (a program launcher)
+bindsym Mod1+d exec /usr/bin/dmenu_run
+
+# change focus
+bindsym Mod1+j focus left
+bindsym Mod1+k focus down
+bindsym Mod1+l focus up
+bindsym Mod1+semicolon focus right
+
+# alternatively, you can use the cursor keys:
+bindsym Mod1+Left focus left
+bindsym Mod1+Down focus down
+bindsym Mod1+Up focus up
+bindsym Mod1+Right focus right
+
+# move focused window
+bindsym Mod1+Shift+j move left
+bindsym Mod1+Shift+k move down
+bindsym Mod1+Shift+l move up
+bindsym Mod1+Shift+semicolon move right
+
+# alternatively, you can use the cursor keys:
+bindsym Mod1+Shift+Left move left
+bindsym Mod1+Shift+Down move down
+bindsym Mod1+Shift+Up move up
+bindsym Mod1+Shift+Right move right
+
+# split in horizontal orientation
+bindsym Mod1+h split h
+
+# split in vertical orientation
+bindsym Mod1+v split v
+
+# enter fullscreen mode for the focused container
+bindsym Mod1+f fullscreen toggle
+
+# change container layout (stacked, tabbed, default)
+bindsym Mod1+s layout stacking
+bindsym Mod1+w layout tabbed
+bindsym Mod1+e layout default
+
+# toggle tiling / floating
+bindsym Mod1+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym Mod1+space focus mode_toggle
+
+# focus the parent container
+bindsym Mod1+a focus parent
+
+# focus the child container
+#bindsym Mod1+d focus child
+
+# switch to workspace
+bindsym Mod1+1 workspace 1
+bindsym Mod1+2 workspace 2
+# ..
+
+# move focused container to workspace
+bindsym Mod1+Shift+1 move workspace 1
+bindsym Mod1+Shift+2 move workspace 2
+# ...
+
+# reload the configuration file
+bindsym Mod1+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym Mod1+Shift+r restart
+# exit i3 (logs you out of your X session)
+bindsym Mod1+Shift+e exit
+
+# display workspace buttons plus a statusline generated by i3status
+bar {
+      status_command i3status
+}
+</code></pre>
+
+<p><link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+  code {
+    font-family: Inconsolata, monospace, sans-serif, FontAwesome;
+  }
+</style></p>
+
+<h2 id="customization">Customization</h2>
+
+<p>Customizations should be made in the <code>~/.config/i3/config</code> file.</p>
+
+<h4 id="i3-status-bar">i3 Status Bar</h4>
+
+<pre><code>bar {
+  status_command i3status
+  font pango:Hack, FontAwesome 10
+}
+</code></pre>
+
+<p>status_command receives json and parses output to the status bar in i3.
+<a href="https://github.com/LemonBoy/bar">Lemonbar</a> is another example of a status bar application that could be in place
+of i3status.</p>
+
+<h4 id="setting-a-background">Setting a Background</h4>
+
+<p><code>feh</code> can be used to set the background for i3. Install <code>feh</code> with:</p>
+
+<pre><code># install feh to managed backgrounds
+sudo apt-get install feh
+</code></pre>
+
+<p>With <code>feh</code> installed, add the following line to i3&rsquo;s config</p>
+
+<pre><code>exec --no-startup-id feh --bg-scale /path/to/awesome/wallpaper.png
+</code></pre>
+
+<h4 id="audio-keys">Audio Keys</h4>
+
+<p>The following configurations can be added to enable audio keys.</p>
+
+<pre><code>bindsym XF86AudioLowerVolume    exec $psst pactl set-sink-volume @DEFAULT_SINK@ -5% &amp;&amp; pactl set-sink-mute @DEFAULT_SINK@ 0 $update
+bindsym XF86AudioRaiseVolume    exec $psst pactl set-sink-volume @DEFAULT_SINK@ +5% &amp;&amp; pactl set-sink-mute @DEFAULT_SINK@ 0 $update
+bindsym XF86AudioMute           exec $psst pactl set-sink-mute @DEFAULT_SINK@ toggle $update
+</code></pre>
+
+<h4 id="screen-brightness">Screen Brightness</h4>
+
+<p>The following configurations can be added to enable brightness keys.</p>
+
+<pre><code>bindsym XF86MonBrightnessDown   exec xbacklight -dec 10
+bindsym XF86MonBrightnessUp     exec xbacklight -inc 10
+</code></pre>
+
+<h4 id="print-screen">Print Screen</h4>
+
+<p>The following configurations can be added to enable print screen. <code>scrot</code> is used in this example. Be sure to install <code>scrot</code> when using this configuration.</p>
+
+<pre><code># install scrot if not installed
+sudo apt-get install scrot
+
+# ~/.config/i3/config
+# Print screen focused window
+bindsym Print exec scrot -u '%Y%m%d_%H%M%S.png' -e 'mv $f ~/Pictures/shots/'
+
+# Print screen entire view
+bindsym $mod+Print exec scrot '%Y%m%d_%Ho%M%S.png' -e 'mv $f ~/Pictures/shots/'
+</code></pre>
+
+<h2 id="configuring-i3status">Configuring i3status</h2>
+
+<p><code>i3status</code> handles the status bar output. The config file for <code>i3status</code> is located in <code>~/.i3status.conf</code>. Here is an example config that uses <a href="http://fontawesome.io/">FontAwesome</a>.</p>
+
+<pre><code># i3status configuration file.
+# see &quot;man i3status&quot; for documentation.
+
+# It is important that this file is edited as UTF-8.
+# The following line should contain a sharp s:
+# ß
+# If the above line is not correctly displayed, fix your editor first!
+
+general {
+        colors = true
+        interval = 5
+}
+
+order += &quot;disk /&quot;
+order += &quot;volume master&quot;
+order += &quot;wireless _first_&quot;
+order += &quot;battery 1&quot;
+order += &quot;load&quot;
+order += &quot;tztime local&quot;
+
+wireless _first_ {
+        format_up = &quot; (%essid - %quality) %ip&quot;
+        format_down = &quot;down&quot;
+}
+
+volume master {
+        format = &quot; %volume&quot;
+        format_muted = &quot; (%volume)&quot;
+        device = &quot;pulse:1&quot;
+        mixer = &quot;Master&quot;
+        mixer_idx = 0
+}
+
+battery 1 {
+        format = &quot;%status %percentage %remaining&quot;
+        status_bat = &quot;&quot;
+        status_chr = &quot;&quot;
+        status_full = &quot;&quot;
+        low_threshold = 30
+        threshold_type = percentage
+        integer_battery_capacity = true
+        color_good = &quot;#0000FF&quot;
+}
+
+run_watch DHCP {
+        pidfile = &quot;/var/run/dhclient*.pid&quot;
+}
+
+run_watch VPN {
+        pidfile = &quot;/var/run/vpnc/pid&quot;
+}
+
+tztime local {
+        format = &quot; %h %d, %Y %I:%M:%S&quot;
+}
+
+load {
+        format = &quot; %1min&quot;
+}
+
+disk &quot;/&quot; {
+        format = &quot; %avail&quot;
+}
+</code></pre>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>i3 is relatively straight forward to setup given the user reads the man page. It will be interesting to dive into research for other status bars, but for now it&rsquo;s time to get back to work.</p>
+
+    </section>
+
+
+  <footer class="post-footer">
+
+
+    
+
+    
+
+
+
+
+
+<section class="author">
+  <h4><a href="http://syntaxstacks.github.io/"></a></h4>
+  
+  <p>John Lozano is a Texan, in his free time he barbeques and spends time with friends. Professionally he is a software developer.</p>
+  
+  <div class="author-meta">
+    <span class="author-location icon-location">San Antonio</span>
+    
+  </div>
+</section>
+
+
+
+    
+<section class="share">
+  <h4>Share this post</h4>
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Configuring%20i3&nbsp;-&nbsp;John%20Lozano&amp;url=http%3a%2f%2fsyntaxstacks.github.io%2fpost%2fconfiguring-i3%2f"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="hidden">Twitter</span>
+  </a>
+  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fsyntaxstacks.github.io%2fpost%2fconfiguring-i3%2f"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="hidden">Facebook</span>
+  </a>
+  <a class="icon-pinterest" style="font-size: 1.4em" href="http://pinterest.com/pin/create/button/?url=http%3a%2f%2fsyntaxstacks.github.io%2fpost%2fconfiguring-i3%2f&amp;description=Configuring%20i3"
+      onclick="window.open(this.href, 'pinterest-share','width=580,height=296');return false;">
+      <span class="hidden">Pinterest</span>
+  </a>
+  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=http%3a%2f%2fsyntaxstacks.github.io%2fpost%2fconfiguring-i3%2f"
+     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+      <span class="hidden">Google+</span>
+  </a>
+</section>
+
+
+
+    
+
+
+
+
+  </footer>
+</article>
+
+</main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">John Lozano</a> </section>
+        
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
+        
+    </footer>
+    </div>
+    <script type="text/javascript" src="http://syntaxstacks.github.io/js/jquery.js"></script>
+    <script type="text/javascript" src="http://syntaxstacks.github.io/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="http://syntaxstacks.github.io/js/index.js"></script>
+    
+</body>
+</html>
+

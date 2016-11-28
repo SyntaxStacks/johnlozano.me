@@ -1,0 +1,33 @@
+{
+  "baseurl": "http://johnlozano.me/",
+  "languageCode": "en-us",
+  "title": "John Lozano",
+  "theme": "casper",
+  "paginate": 5,
+  "copywrite": "All rights reserved - 2016",
+  "menu": {
+    "main": [{
+      "identifier": "blog",
+      "name": "blog",
+      "url": "/",
+      "weight": "-120"
+    }]
+  },
+  "params": {
+    "description": "Ideas are worth their weight unless acted upon.",
+    "cover": "https://scontent-dft4-2.cdninstagram.com/t51.2885-15/e15/10684208_361417754011779_150535373_n.jpg?ig_cache_key=ODEwNDUxNTk2NzAyNjYzMzYy.2",
+    "author": "",
+    "authorlocation": "San Antonio",
+    "bio": "John Lozano is a Texan, in his free time he barbeques and spends time with friends. Professionally he is a software developer.",
+    "logo": "",
+    "googleAnalyticsUserID": "UA-79101-12",
+    "githubName": "SyntaxStacks",
+    "twitterName": "",
+    "facebookName": "",
+    "linkedinName": "john-lozano-1b4b0b12",
+    "hideHUGOSupport": false,
+    "social": {
+      "twitter": "your_twitter"
+    }
+  }
+}

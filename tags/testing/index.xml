@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>John Lozano</title>
+    <link>http://syntaxstacks.github.io/tags/testing/index.xml</link>
+    <description>Recent content on John Lozano</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="http://syntaxstacks.github.io/tags/testing/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Testing Spree Commerce with RSpec</title>
+      <link>http://syntaxstacks.github.io/post/testing-spree-commerce-with-rspec/</link>
+      <pubDate>Sat, 12 Nov 2016 11:08:56 -0600</pubDate>
+      
+      <guid>http://syntaxstacks.github.io/post/testing-spree-commerce-with-rspec/</guid>
+      <description>
+
+&lt;p&gt;Spree commerce is a rails plugin that allows users to stand up their own ecommerce platform.
+I am currently working on a project that will integrate a drop shipping API with spreee commerce
+and insist on testing my work to prevent regressions moving forward. The current issue that
+I am solving for is to send an order to the drop shipper via an API call upon completion of an order.
+The API call has been encapsulated in a method named &lt;code&gt;submit_order_to_printful&lt;/code&gt; on the &lt;code&gt;Spree::Order&lt;/code&gt; model and a test is needed to validate
+that the method is being called when we are expecting it to be.&lt;/p&gt;
+
+&lt;h2 id=&#34;testing-with-rspec&#34;&gt;Testing with RSpec&lt;/h2&gt;
+
+&lt;h6 id=&#34;spec-models-order-decorator-spec-rb&#34;&gt;spec/models/order_decorator_spec.rb&lt;/h6&gt;
+
+&lt;pre&gt;&lt;code&gt;require &#39;rails_helper&#39;
+
+# Turn off the job queue
+Delayed::Worker.delay_jobs = false
+
+describe Spree::Order, type: :model do
+  let(:order) { FactoryGirl.create(:order_with_line_items)}
+  before do
+    allow(order).to receive(:require_email)
+    allow(Spree::Order.printful_api).to receive(:post)
+  end
+
+  context &amp;quot;when current state is confirm&amp;quot; do
+    before do
+      order.state = &amp;quot;confirm&amp;quot;
+
+      # Mocking Spree::Order checkout_flow requirements
+      allow(order).to receive_messages payment_required?: true
+      allow(order).to receive_messages process_payments!: true
+      allow(order).to receive_messages confirmation_delivered?: true
+    end
+
+    context &amp;quot;when payment processing succeeds&amp;quot; do
+      before do
+        order.payments &amp;lt;&amp;lt; FactoryGirl.create(:payment, state: &#39;checkout&#39;, order: order)
+      end
+
+      it &amp;quot;should submit order to printful&amp;quot; do
+        expect(Spree::Order).to receive(:submit_order_to_printful)
+        order.next!
+        expect(order.state).to eq(&#39;complete&#39;)
+      end
+    end
+  end
+end
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We start by disabling &lt;a href=&#34;https://github.com/tobi/delayed_job&#34;&gt;DelayedJob&lt;/a&gt; for testing purposes.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;require &#39;rails_helper&#39;
+
+# Turn off job queue
+Delayed::Worker.delay_jobs = false
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then the order state is set to &lt;code&gt;confirm&lt;/code&gt;. The &lt;a href=&#34;https://github.com/spree/spree/blob/master/core/app/models/spree/order.rb#L46-L53&#34;&gt;Checkout Flow&lt;/a&gt;
+for the Order model in spree requires a few conditions at various points during the checkout.
+We can force the flow of the checkout by mocking the conditions require for completion.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;order.state = &amp;quot;confirm&amp;quot;
+
+# Mocking Spree::Order checkout_flow requirements
+allow(order).to receive_messages payment_required?: true
+allow(order).to receive_messages process_payments!: true
+allow(order).to receive_messages confirmation_delivered?: true
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;That will allow us to test the logic of the checkout process in isolation.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;context &amp;quot;when payment processing succeeds&amp;quot; do
+  before do
+    order.payments &amp;lt;&amp;lt; FactoryGirl.create(:payment, state: &#39;checkout&#39;, order: order)
+  end
+
+  it &amp;quot;should submit order to printful&amp;quot; do
+    expect(Spree::Order).to receive(:submit_order_to_printful)
+    order.next!
+    expect(order.state).to eq(&#39;complete&#39;)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;We add a fake payment to the order and then start our assertions and actions. &lt;code&gt;order.next!&lt;/code&gt; steps the
+&lt;code&gt;complete&lt;/code&gt; state and we can expect that the &lt;code&gt;submit_order_to_printful&lt;/code&gt; method is called.&lt;/p&gt;
+
+&lt;h2 id=&#34;the-code&#34;&gt;The Code&lt;/h2&gt;
+
+&lt;p&gt;The code to implement the hook is simple&lt;/p&gt;
+
+&lt;h6 id=&#34;app-models-spree-order-decorator-rb&#34;&gt;app/models/spree/order_decorator.rb&lt;/h6&gt;
+
+&lt;pre&gt;&lt;code&gt;Spree::Order.class_eval do
+  include PrintfulConcern
+
+  state_machine.after_transition :to =&amp;gt; :complete do |order|
+    Spree::Order.submit_order_to_printful(order)
+  end
+end
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;The &lt;code&gt;PrintfulConcern&lt;/code&gt; contains the integration to the printful api and adds &lt;code&gt;submit_order_to_printful&lt;/code&gt;
+method to the Spree:Order class. With that we add logic to the &lt;code&gt;complete&lt;/code&gt; state&amp;rsquo;s after_transition hook
+and pass the order information to the method.&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;Now that we have the functionality implemented and tested, we can place orders in spree and see orders populated
+in Printfuls control panel. The work we have today will work tomorrow, and when it doesn&amp;rsquo;t, we will know.&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    
+
+
+    
+        
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:image" content="http://syntaxstacks.github.io//assets/images/spree.png"/>
+    
+
+
+
+<meta name="twitter:title" content="Testing Spree Commerce with RSpec"/>
+<meta name="twitter:description" content="Spree commerce is a rails plugin that allows users to stand up their own ecommerce platform. I am currently working on a project that will integrate a drop shipping API with spreee commerce and insist on testing my work to prevent regressions moving forward. The current issue that I am solving for is to send an order to the drop shipper via an API call upon completion of an order."/>
+
+    <meta name="twitter:site" content="@your_twitter"/>
+
+
+
+  	<meta property="og:title" content=" Testing Spree Commerce with RSpec &middot;  John Lozano" />
+  	<meta property="og:site_name" content="John Lozano" />
+  	<meta property="og:url" content="http://syntaxstacks.github.io/post/testing-spree-commerce-with-rspec/" />
+
+    
+  	<meta property="og:type" content="article" />
+
+    <meta property="og:article:published_time" content="2016-11-12T11:08:56-06:00" />
+
+    
+    <meta property="og:article:tag" content="testing" />
+    
+    <meta property="og:article:tag" content="rails" />
+    
+    <meta property="og:article:tag" content="ruby" />
+    
+    
+
+    <title>
+       Testing Spree Commerce with RSpec &middot;  John Lozano
+    </title>
+
+    <meta name="description" content="Ideas are worth their weight unless acted upon." />
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="http://syntaxstacks.github.io/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="http://syntaxstacks.github.io/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="http://syntaxstacks.github.io/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="http://syntaxstacks.github.io/css/nav.css" />
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Merriweather:300,700,700italic,300italic|Open+Sans:700,400|Inconsolata" />
+
+
+    
+      
+          <link href="http://syntaxstacks.github.io/index.xml" rel="alternate" type="application/rss+xml" title="John Lozano" />
+      
+      
+    
+    <meta name="generator" content="Hugo 0.17" />
+
+    <link rel="canonical" href="http://syntaxstacks.github.io/post/testing-spree-commerce-with-rspec/" />
+
+    
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-79101-12', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+    
+
+    
+</head>
+<body class="nav-closed">
+
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/">blog</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/post/configuring-i3/">Configuring i3</a>
+            </li>
+        
+            
+            <li class="nav-opened nav-current" role="presentation">
+            	<a href="/post/testing-spree-commerce-with-rspec/">Testing Spree Commerce with RSpec</a>
+            </li>
+        
+    </ul>
+    
+    
+    <a class="subscribe-button icon-feed" href="http://syntaxstacks.github.io/index.xml">Subscribe</a>
+    
+</div>
+<span class="nav-cover"></span>
+
+
+ <div class="site-wrapper">
+
+
+
+
+  
+  <header class="main-header post-head" style="background-image: url(http://syntaxstacks.github.io//assets/images/spree.png)">
+  
+  <nav class="main-nav overlay clearfix">
+
+
+  
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
+</header>
+
+
+
+<main class="content" role="main">
+
+
+
+
+  <article class="post post">
+
+    <header class="post-header">
+        <h1 class="post-title">Testing Spree Commerce with RSpec</h1>
+        <small></small>
+
+        <section class="post-meta">
+        
+          <time class="post-date" datetime="2016-11-12T11:08:56-06:00">
+            Nov 12, 2016
+          </time>
+        
+         
+          <span class="post-tag small"><a href="http://syntaxstacks.github.io/tags/testing/">#testing</a></span>
+         
+          <span class="post-tag small"><a href="http://syntaxstacks.github.io/tags/rails/">#rails</a></span>
+         
+          <span class="post-tag small"><a href="http://syntaxstacks.github.io/tags/ruby/">#ruby</a></span>
+         
+        </section>
+    </header>
+
+    <section class="post-content">
+      
+
+<p>Spree commerce is a rails plugin that allows users to stand up their own ecommerce platform.
+I am currently working on a project that will integrate a drop shipping API with spreee commerce
+and insist on testing my work to prevent regressions moving forward. The current issue that
+I am solving for is to send an order to the drop shipper via an API call upon completion of an order.
+The API call has been encapsulated in a method named <code>submit_order_to_printful</code> on the <code>Spree::Order</code> model and a test is needed to validate
+that the method is being called when we are expecting it to be.</p>
+
+<h2 id="testing-with-rspec">Testing with RSpec</h2>
+
+<h6 id="spec-models-order-decorator-spec-rb">spec/models/order_decorator_spec.rb</h6>
+
+<pre><code>require 'rails_helper'
+
+# Turn off the job queue
+Delayed::Worker.delay_jobs = false
+
+describe Spree::Order, type: :model do
+  let(:order) { FactoryGirl.create(:order_with_line_items)}
+  before do
+    allow(order).to receive(:require_email)
+    allow(Spree::Order.printful_api).to receive(:post)
+  end
+
+  context &quot;when current state is confirm&quot; do
+    before do
+      order.state = &quot;confirm&quot;
+
+      # Mocking Spree::Order checkout_flow requirements
+      allow(order).to receive_messages payment_required?: true
+      allow(order).to receive_messages process_payments!: true
+      allow(order).to receive_messages confirmation_delivered?: true
+    end
+
+    context &quot;when payment processing succeeds&quot; do
+      before do
+        order.payments &lt;&lt; FactoryGirl.create(:payment, state: 'checkout', order: order)
+      end
+
+      it &quot;should submit order to printful&quot; do
+        expect(Spree::Order).to receive(:submit_order_to_printful)
+        order.next!
+        expect(order.state).to eq('complete')
+      end
+    end
+  end
+end
+
+</code></pre>
+
+<p>We start by disabling <a href="https://github.com/tobi/delayed_job">DelayedJob</a> for testing purposes.</p>
+
+<pre><code>require 'rails_helper'
+
+# Turn off job queue
+Delayed::Worker.delay_jobs = false
+</code></pre>
+
+<p>Then the order state is set to <code>confirm</code>. The <a href="https://github.com/spree/spree/blob/master/core/app/models/spree/order.rb#L46-L53">Checkout Flow</a>
+for the Order model in spree requires a few conditions at various points during the checkout.
+We can force the flow of the checkout by mocking the conditions require for completion.</p>
+
+<pre><code>order.state = &quot;confirm&quot;
+
+# Mocking Spree::Order checkout_flow requirements
+allow(order).to receive_messages payment_required?: true
+allow(order).to receive_messages process_payments!: true
+allow(order).to receive_messages confirmation_delivered?: true
+</code></pre>
+
+<p>That will allow us to test the logic of the checkout process in isolation.</p>
+
+<pre><code>context &quot;when payment processing succeeds&quot; do
+  before do
+    order.payments &lt;&lt; FactoryGirl.create(:payment, state: 'checkout', order: order)
+  end
+
+  it &quot;should submit order to printful&quot; do
+    expect(Spree::Order).to receive(:submit_order_to_printful)
+    order.next!
+    expect(order.state).to eq('complete')
+  end
+end
+</code></pre>
+
+<p>We add a fake payment to the order and then start our assertions and actions. <code>order.next!</code> steps the
+<code>complete</code> state and we can expect that the <code>submit_order_to_printful</code> method is called.</p>
+
+<h2 id="the-code">The Code</h2>
+
+<p>The code to implement the hook is simple</p>
+
+<h6 id="app-models-spree-order-decorator-rb">app/models/spree/order_decorator.rb</h6>
+
+<pre><code>Spree::Order.class_eval do
+  include PrintfulConcern
+
+  state_machine.after_transition :to =&gt; :complete do |order|
+    Spree::Order.submit_order_to_printful(order)
+  end
+end
+</code></pre>
+
+<p>The <code>PrintfulConcern</code> contains the integration to the printful api and adds <code>submit_order_to_printful</code>
+method to the Spree:Order class. With that we add logic to the <code>complete</code> state&rsquo;s after_transition hook
+and pass the order information to the method.</p>
+
+<h2 id="conclusion">Conclusion</h2>
+
+<p>Now that we have the functionality implemented and tested, we can place orders in spree and see orders populated
+in Printfuls control panel. The work we have today will work tomorrow, and when it doesn&rsquo;t, we will know.</p>
+
+    </section>
+
+
+  <footer class="post-footer">
+
+
+    
+
+    
+
+
+
+
+
+<section class="author">
+  <h4><a href="http://syntaxstacks.github.io/"></a></h4>
+  
+  <p>John Lozano is a Texan, in his free time he barbeques and spends time with friends. Professionally he is a software developer.</p>
+  
+  <div class="author-meta">
+    <span class="author-location icon-location">San Antonio</span>
+    
+  </div>
+</section>
+
+
+
+    
+<section class="share">
+  <h4>Share this post</h4>
+  <a class="icon-twitter" style="font-size: 1.4em" href="https://twitter.com/share?text=Testing%20Spree%20Commerce%20with%20RSpec&nbsp;-&nbsp;John%20Lozano&amp;url=http%3a%2f%2fsyntaxstacks.github.io%2fpost%2ftesting-spree-commerce-with-rspec%2f"
+      onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+      <span class="hidden">Twitter</span>
+  </a>
+  <a class="icon-facebook" style="font-size: 1.4em" href="https://www.facebook.com/sharer/sharer.php?u=http%3a%2f%2fsyntaxstacks.github.io%2fpost%2ftesting-spree-commerce-with-rspec%2f"
+      onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+      <span class="hidden">Facebook</span>
+  </a>
+  <a class="icon-pinterest" style="font-size: 1.4em" href="http://pinterest.com/pin/create/button/?url=http%3a%2f%2fsyntaxstacks.github.io%2fpost%2ftesting-spree-commerce-with-rspec%2f&amp;description=Testing%20Spree%20Commerce%20with%20RSpec"
+      onclick="window.open(this.href, 'pinterest-share','width=580,height=296');return false;">
+      <span class="hidden">Pinterest</span>
+  </a>
+  <a class="icon-google-plus" style="font-size: 1.4em" href="https://plus.google.com/share?url=http%3a%2f%2fsyntaxstacks.github.io%2fpost%2ftesting-spree-commerce-with-rspec%2f"
+     onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+      <span class="hidden">Google+</span>
+  </a>
+</section>
+
+
+
+    
+
+
+
+
+  </footer>
+</article>
+
+</main>
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">John Lozano</a> </section>
+        
+        <section class="poweredby">Proudly generated by <a class="icon-hugo" href="http://gohugo.io">HUGO</a>, with <a class="icon-theme" href="https://github.com/vjeantet/hugo-theme-casper">Casper</a> theme</section>
+        
+    </footer>
+    </div>
+    <script type="text/javascript" src="http://syntaxstacks.github.io/js/jquery.js"></script>
+    <script type="text/javascript" src="http://syntaxstacks.github.io/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="http://syntaxstacks.github.io/js/index.js"></script>
+    
+</body>
+</html>
+
